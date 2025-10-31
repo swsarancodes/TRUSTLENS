@@ -2,7 +2,9 @@
 
 # TrustLens - AI Model Trust and Transparency Analysis
 
-TrustLens is a comprehensive Streamlit application for analyzing AI model trust, transparency, and performance. It supports both PyTorch and ONNX models and provides detailed insights into model predictions and confidence scores. This implementation focuses on a hybrid CNN-ViT model trained to distinguish between real and AI-generated images.
+https://github.com/user-attachments/assets/901056d5-0355-499f-b6e5-4a342c6759c4
+
+TrustLens is a comprehensive Streamlit application for analyzing AI model trust, transparency, and performance. It supportsONNX models and provides detailed insights into model predictions and confidence scores. This implementation focuses on a hybrid CNN-ViT model trained to distinguish between real and AI-generated images.
 
 ## Features
 
