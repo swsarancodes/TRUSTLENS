@@ -131,6 +131,8 @@ The model is trained on the CIFAKE dataset (Real and AI Generated Synthetic Imag
 
 ## Training
 
+<img width="1490" height="690" alt="Image" src="https://github.com/user-attachments/assets/739eaec7-71da-4bf5-ac6b-bb09fffd893d" />
+
 The model was trained for 10 epochs with the following configuration:
 - Optimizer: Adam (learning rate: 0.0001)
 - Loss function: Cross-entropy loss
