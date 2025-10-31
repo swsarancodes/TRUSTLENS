@@ -1,0 +1,60 @@
+[project]
+name = "trustlens"
+version = "0.1.0"
+description = "TrustLens - AI Model Trust and Transparency Analysis"
+authors = [
+    {name = "TrustLens Team", email = "team@trustlens.ai"}
+]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "torch>=2.0.0",
+    "torchvision>=0.15.0",
+    "streamlit>=1.28.0",
+    "numpy>=1.21.0",
+    "pandas>=1.3.0",
+    "matplotlib>=3.5.0",
+    "seaborn>=0.11.0",
+    "plotly>=5.0.0",
+    "pillow>=8.0.0",
+    "opencv-python>=4.5.0",
+    "scikit-learn>=1.0.0",
+    "tqdm>=4.62.0",
+    "onnx>=1.12.0",
+    "onnxruntime>=1.12.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0.0",
+    "black>=22.0.0",
+    "flake8>=4.0.0",
+    "mypy>=0.910",
+]
+
+[project.scripts]
+trustlens-app = "app:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=6.0.0",
+    "black>=22.0.0",
+    "flake8>=4.0.0",
+    "mypy>=0.910",
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
