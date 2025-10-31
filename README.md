@@ -1,18 +1,20 @@
-# 🔍 TrustLens - AI Model Trust and Transparency Analysis
 
-TrustLens is a comprehensive Streamlit application for analyzing AI model trust, transparency, and performance. It supports both PyTorch and ONNX models and provides detailed insights into model predictions and confidence scores.
 
-## 🚀 Features
+# TrustLens - AI Model Trust and Transparency Analysis
 
-- **Multi-Model Support**: Load and compare PyTorch (.pth) and ONNX (.onnx) models
-- **Interactive Inference**: Upload images or use sample data for real-time predictions
-- **Trust Analysis**: Advanced trust scoring and confidence analysis
-- **Comprehensive Analytics**: Detailed performance metrics and visualizations
-- **Model Comparison**: Side-by-side comparison of different model types
-- **Export Capabilities**: Export inference history as CSV or JSON
-- **Modern UI**: Beautiful, responsive interface with real-time updates
+TrustLens is a comprehensive Streamlit application for analyzing AI model trust, transparency, and performance. It supports both PyTorch and ONNX models and provides detailed insights into model predictions and confidence scores. This implementation focuses on a hybrid CNN-ViT model trained to distinguish between real and AI-generated images.
 
-## 📁 Project Structure
+## Features
+
+- Multi-Model Support: Load and compare PyTorch (.pth) and ONNX (.onnx) models
+- Interactive Inference: Upload images or use sample data for real-time predictions
+- Trust Analysis: Advanced trust scoring and confidence analysis
+- Comprehensive Analytics: Detailed performance metrics and visualizations
+- Model Comparison: Side-by-side comparison of different model types
+- Export Capabilities: Export inference history as CSV or JSON
+- Modern UI: Beautiful, responsive interface with real-time updates
+
+## Project Structure
 
 ```
 TRUSTLENS/
@@ -26,7 +28,7 @@ TRUSTLENS/
 └── hybrid_model.onnx    # ONNX optimized model
 ```
 
-## 🛠️ Installation
+## Installation
 
 ### Option 1: Using UV (Recommended)
 
@@ -52,60 +54,112 @@ pip install -r requirements.txt
 pip install torch torchvision streamlit numpy pandas matplotlib seaborn plotly pillow opencv-python scikit-learn tqdm onnx onnxruntime
 ```
 
-## 🚀 Usage
+## Usage
 
-1. **Start the application**:
+1. Start the application:
 ```bash
 streamlit run app.py
 ```
 
-2. **Load Models**:
-   - Click "🔄 Load Models" in the sidebar
+2. Load Models:
+   - Click "Load Models" in the sidebar
    - The app will automatically detect and load available model files
 
-3. **Run Inference**:
+3. Run Inference:
    - Choose input method (Upload Image, Sample Data, or Random Input)
    - Select model type (PyTorch or ONNX)
-   - Click "🚀 Run Inference"
+   - Click "Run Inference"
 
-4. **Analyze Results**:
+4. Analyze Results:
    - View predictions, confidence scores, and trust metrics
    - Explore detailed analytics and visualizations
    - Compare different models and export results
 
-## 📊 Model Architecture
+## Model Architecture
 
-The hybrid model includes:
+The hybrid model combines convolutional neural networks with vision transformers for robust image classification:
 
-- **Feature Extractor**: Convolutional layers for image feature extraction
-- **Classifier**: Multi-layer perceptron for classification
-- **Trust Analyzer**: Specialized layers for trust score computation
+### CNN Block
+- Three convolutional layers with batch normalization and ReLU activation
+- Feature extraction from input images
+- Output shape: 64 channels with 24x24 spatial dimensions
+
+### Vision Transformer (ViT) Block
+- Patch embedding with 5x5 patches
+- 5 transformer encoder layers
+- Multi-head self-attention with 128 heads
+- 256-dimensional embedding space
+
+### Attention Mechanism
+- Custom attention mechanism for feature refinement
+- Query-key-value attention with layer normalization
+- 128-dimensional attention space
+
+### Classifier
+- Fully connected layers for final classification
+- Dropout for regularization
+- Binary classification output (REAL vs FAKE)
 
 ### Model Configuration
 
 ```python
 model_config = {
-    "input_size": 224,      # Input image size
-    "num_classes": 2,       # Number of output classes
-    "hidden_dim": 512       # Hidden layer dimension
+    "input_size": 32,       # Input image size
+    "num_classes": 2,       # Number of output classes (REAL, FAKE)
+    "hidden_dim": 256,      # Hidden layer dimension
+    "patch_size": 5,        # Size of patches for ViT
+    "num_transformer_layers": 5,  # Number of transformer encoder layers
+    "num_heads": 128,       # Number of attention heads
+    "mlp_size": 2048        # Size of MLP in transformer
 }
 ```
 
-## 🔧 Configuration
+## Dataset
+
+The model is trained on the CIFAKE dataset (Real and AI Generated Synthetic Images):
+- Training set: 100,000 images (50,000 REAL, 50,000 FAKE)
+- Test set: 20,000 images (10,000 REAL, 10,000 FAKE)
+- Image size: 32x32 RGB images
+- Classes: REAL (authentic photographs) and FAKE (AI-generated images)
+
+### Data Preprocessing
+- Random Gaussian blur (50% probability) for training data augmentation
+- Resizing to 32x32 pixels
+- Normalization with ImageNet statistics
+
+## Training
+
+The model was trained for 10 epochs with the following configuration:
+- Optimizer: Adam (learning rate: 0.0001)
+- Loss function: Cross-entropy loss
+- Learning rate scheduler: ReduceLROnPlateau
+- Batch size: 32
+- Device: CUDA (GPU acceleration)
+
+### Training Results
+- Final training accuracy: 97.80%
+- Final test accuracy: 94.11%
+- Training loss decreased from 0.2024 to 0.0592
+- Test loss decreased from 0.1806 to 0.1838
+
+### Classification Performance
+- Precision: 0.94 (both classes)
+- Recall: 0.93 (FAKE), 0.95 (REAL)
+- F1-score: 0.94 (both classes)
+
+## Configuration
 
 ### Model Settings
-
-- **Confidence Threshold**: Minimum confidence for high-confidence predictions
-- **Trust Threshold**: Minimum trust score for reliable predictions
-- **Model Type**: Choose between PyTorch and ONNX inference
+- Confidence Threshold: Minimum confidence for high-confidence predictions
+- Trust Threshold: Minimum trust score for reliable predictions
+- Model Type: Choose between PyTorch and ONNX inference
 
 ### Input Formats
+- Images: PNG, JPG, JPEG, BMP, TIFF
+- Size: Automatically resized to 32x32
+- Channels: RGB (3 channels)
 
-- **Images**: PNG, JPG, JPEG, BMP, TIFF
-- **Size**: Automatically resized to 224x224
-- **Channels**: RGB (3 channels)
-
-## 📈 Analytics Features
+## Analytics Features
 
 ### Real-time Metrics
 - Prediction accuracy
@@ -124,7 +178,7 @@ model_config = {
 - JSON format for programmatic access
 - Visualization exports
 
-## 🎯 Model Training Integration
+## Model Training Integration
 
 The application is designed to work with models trained using the provided boilerplate code structure:
 
@@ -148,44 +202,49 @@ for epoch in range(epochs):
     }, checkpoint_path)
 ```
 
-## 🔍 Trust Analysis
+## Trust Analysis
 
 TrustLens provides advanced trust metrics:
+- Confidence Score: Model's certainty in predictions
+- Trust Score: Reliability assessment based on feature analysis
+- Feature Activation: Visualization of important features
+- Prediction Stability: Consistency across similar inputs
 
-- **Confidence Score**: Model's certainty in predictions
-- **Trust Score**: Reliability assessment based on feature analysis
-- **Feature Activation**: Visualization of important features
-- **Prediction Stability**: Consistency across similar inputs
+## ONNX Export
 
-## 🚨 Troubleshooting
+The model has been exported to ONNX format for optimized inference:
+- Compatible with ONNX Runtime
+- Dynamic batch size support
+- Optimized for production deployment
+
+## Troubleshooting
 
 ### Common Issues
 
-1. **Model Loading Errors**:
+1. Model Loading Errors:
    - Ensure model files are in the correct directory
    - Check file permissions and integrity
    - Verify model architecture compatibility
 
-2. **CUDA Issues**:
+2. CUDA Issues:
    - The app automatically detects GPU availability
    - Falls back to CPU if CUDA is unavailable
 
-3. **Memory Issues**:
+3. Memory Issues:
    - Reduce batch size for large images
    - Close other applications to free memory
 
-4. **Import Errors**:
+4. Import Errors:
    - Ensure all dependencies are installed
    - Check Python version compatibility (>=3.8)
 
 ### Performance Tips
-
 - Use ONNX models for faster inference
 - Enable GPU acceleration when available
 - Optimize image sizes before upload
 - Clear inference history periodically
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -193,18 +252,19 @@ TrustLens provides advanced trust metrics:
 4. Add tests if applicable
 5. Submit a pull request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Built with Streamlit for the interactive interface
 - PyTorch for deep learning capabilities
 - ONNX for model optimization
 - Plotly for advanced visualizations
+- CIFAKE dataset for training and evaluation
 
-## 📞 Support
+## Support
 
 For issues and questions:
 1. Check the troubleshooting section
@@ -214,4 +274,4 @@ For issues and questions:
 
 ---
 
-**Happy Analyzing! 🔍✨**
+Happy Analyzing!
