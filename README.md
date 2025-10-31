@@ -119,7 +119,7 @@ model_config = {
 ## Dataset
 
 The model is trained on the CIFAKE dataset (Real and AI Generated Synthetic Images):
-- Training set: 100,000 images (50,000 REAL, 50,000 FAKE)
+- Training set: 120,000 images (60,000 REAL, 60,000 FAKE)
 - Test set: 20,000 images (10,000 REAL, 10,000 FAKE)
 - Image size: 32x32 RGB images
 - Classes: REAL (authentic photographs) and FAKE (AI-generated images)
